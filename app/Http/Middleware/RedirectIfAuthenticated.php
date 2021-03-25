@@ -16,14 +16,34 @@ class RedirectIfAuthenticated
      * @param  string|null  ...$guards
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$guards)
+    // public function handle($request, Closure $next, ...$guards)
+    public function handle($request, Closure $next, $guard = null)    
     {
-        $guards = empty($guards) ? [null] : $guards;
+        // $guards = empty($guards) ? [null] : $guards;
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
-            }
+        // switch ($guard){
+        //     case 'admin':
+        //         if (Auth::guard($guard)->check()) {
+        //             return redirect()->route('admin');
+        //             // return redirect(RouteServiceProvider::ADMIN);
+        //         }
+        //         break;
+
+        //     default:
+        //         if (Auth::guard($guard)->check()) {
+        //             return redirect()->route('/');
+        //             // return redirect(RouteServiceProvider::HOME);
+        //         }
+        //         break;
+        // }
+
+        if ($guard == "admin" && Auth::guard($guard)->check()) {
+            return redirect()->route('admin.index');
+        }        
+
+        if (Auth::guard($guard)->check()) {
+            return redirect(RouteServiceProvider::HOME);
+            return redirect()->route('/');
         }
 
         return $next($request);
