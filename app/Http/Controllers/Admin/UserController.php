@@ -16,8 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $title = 'Users';
-        return view('admin.users.index')->with('title', $title);
+        return view('admin.users.index');
     }
 
     /**
@@ -27,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -38,18 +37,29 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $user = new User;
 
-        $user->firstname = $request('firstname');
-        $user->lastname = $request('lastname');
-        $user->username = $request('username');
-        $user->email = $request('email');
-        $user->password = Hash::make($request('password'));
-        $user->save();
+        $this->validate($request, [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
 
-        Session::flash('success', 'User added Successfully.');
-        return redirect()->back();            
+        $user->firstname = $request->input('firstname');
+        $user->lastname = $request->input('lastname');
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+
+        if($user->save()){
+            Session::flash('success', 'User created Successfully.');
+            return redirect()->back();            
+        }else{
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -61,7 +71,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.users.show')->with('user', $user);
+        return view('admin.users.show', ['user' => $user]);
     }
 
     /**
@@ -73,7 +83,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.users.edit')->with('user', $user);
+        return view('admin.users.edit', ['user' => $user]);
     }
 
     /**
@@ -87,15 +97,33 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $user->firstname = $request('firstname');
-        $user->lastname = $request('lastname');
-        $user->username = $request('username');
-        $user->email = $request('email');
-        $user->password = Hash::make($request('password'));
-        $user->save();
+        $this->validate($request, [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
+        
+        $user->firstname = $request->input('firstname');
+        $user->lastname = $request->input('lastname');
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        
+        if($request->input('password')){
+            $this->validate($request, [
+                'password' => ['required', 'string', 'min:6', 'confirmed'],
+            ]);
+            
+            $user->password = Hash::make($request->input('password'));
+        }
 
-        Session::flash('success', 'User updated Successfully.');
-        return redirect()->back();        
+        if($user->save()){
+            Session::flash('success', 'User updated Successfully.');
+            return redirect()->back();            
+        }else{
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -107,6 +135,13 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::destroy($id);
-        return redirect()->back()->with('success', 'User Deleted Successfully');
+
+        if($user){
+            Session::flash('success', 'User deleted Successfully.');
+            return redirect()->back();            
+        }else{
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
+        }
     }
 }

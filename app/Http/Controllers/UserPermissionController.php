@@ -58,24 +58,24 @@ class UserPermissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\UserPermission  $user_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(UserPermission $user_permission)
+    public function show($id)
     {
-        $user_permission = UserPermission::findOrFail($user_permission);
+        $user_permission = UserPermission::findOrFail($id);
         return view('user-permissions.show', ['user_permission' => $user_permission]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\UserPermission  $user_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserPermission $user_permission)
+    public function edit($id)
     {
-        $user_permission = UserPermission::findOrFail($user_permission);
+        $user_permission = UserPermission::findOrFail($id);
 
         return view('user-permissions.edit', ['user_permission' => $user_permission]);
     }
@@ -84,12 +84,12 @@ class UserPermissionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserPermission  $user_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserPermission $user_permission)
+    public function update(Request $request, $id)
     {
-        $user_permission = UserPermission::findOrFail($user_permission);
+        $user_permission = UserPermission::findOrFail($id);
 
         $this->validate($request, [
             'permission_id' => 'required',
@@ -112,12 +112,12 @@ class UserPermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\UserPermission  $user_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserPermission $user_permission)
+    public function destroy($id)
     {
-        $user_permission = UserPermission::destroy($user_permission);
+        $user_permission = UserPermission::destroy($id);
 
         if($user_permission){
             Session::flash('success', 'User Permission deleted Successfully.');

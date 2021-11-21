@@ -58,24 +58,24 @@ class UserRoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\UserRole  $user_role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(UserRole $user_role)
+    public function show($id)
     {
-        $user_role = UserRole::findOrFail($user_role);
+        $user_role = UserRole::findOrFail($id);
         return view('user-roles.show', ['user_role' => $user_role]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\UserRole  $user_role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserRole $user_role)
+    public function edit($id)
     {
-        $user_role = UserRole::findOrFail($user_role);
+        $user_role = UserRole::findOrFail($id);
 
         return view('user-roles.edit', ['user_role' => $user_role]);
     }
@@ -84,12 +84,12 @@ class UserRoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserRole  $user_role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserRole $user_role)
+    public function update(Request $request, $id)
     {
-        $user_role = UserRole::findOrFail($user_role);
+        $user_role = UserRole::findOrFail($id);
 
         $this->validate($request, [
             'role_id' => 'required',
@@ -112,12 +112,12 @@ class UserRoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\UserRole  $user_role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserRole $user_role)
+    public function destroy($id)
     {
-        $user_role = UserRole::destroy($user_role);
+        $user_role = UserRole::destroy($id);
 
         if($user_role){
             Session::flash('success', 'User Role deleted Successfully.');

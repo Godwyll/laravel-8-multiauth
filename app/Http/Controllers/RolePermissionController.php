@@ -62,24 +62,24 @@ class RolePermissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\RolePermission  $role_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(RolePermission $role_permission)
+    public function show($id)
     {
-        $role_permission = RolePermission::findOrFail($role_permission);
+        $role_permission = RolePermission::findOrFail($id);
         return view('role-permissions.show', ['role_permission' => $role_permission]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\RolePermission  $role_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(RolePermission $role_permission)
+    public function edit($id)
     {
-        $role_permission = RolePermission::findOrFail($role_permission);
+        $role_permission = RolePermission::findOrFail($id);
         return view('role-permissions.edit', ['role_permission' => $role_permission]);
     }
 
@@ -87,12 +87,12 @@ class RolePermissionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\RolePermission  $role_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RolePermission $role_permission)
+    public function update(Request $request, $id)
     {
-        $role_permission = RolePermission::findOrFail($role_permission);
+        $role_permission = RolePermission::findOrFail($id);
 
         $this->validate($request, [
             'user_id' => 'required',
@@ -118,12 +118,12 @@ class RolePermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\RolePermission  $role_permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RolePermission $role_permission)
+    public function destroy($id)
     {
-        $role_permission = RolePermission::destroy($role_permission);
+        $role_permission = RolePermission::destroy($id);
 
         if($role_permission){
             Session::flash('success', 'Role Permission deleted Successfully.');

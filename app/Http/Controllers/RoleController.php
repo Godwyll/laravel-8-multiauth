@@ -58,24 +58,24 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
-        $role = Role::findOrFail($role);
+        $role = Role::findOrFail($id);
         return view('roles.show')->with('role', $role);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
-        $role = Role::findOrFail($role);
+        $role = Role::findOrFail($id);
         return view('roles.edit')->with('role', $role);
     }
 
@@ -83,12 +83,12 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($role);
+        $role = Role::findOrFail($id);
 
         $this->validate($request, [
             'name' => 'required',
@@ -109,12 +109,12 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        $role = Role::destroy($role);
+        $role = Role::destroy($id);
 
         if($role){
             return redirect()->back()->with('success', 'Role deleted Successfully.');

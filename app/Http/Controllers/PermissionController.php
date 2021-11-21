@@ -66,24 +66,24 @@ class PermissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Permission  $permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Permission $permission)
+    public function show($id)
     {
-        $permission = Permission::findOrFail($permission);
+        $permission = Permission::findOrFail($id);
         return view('permissions.show', ['permission' => $permission]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Permission  $permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Permission $permission)
+    public function edit($id)
     {
-        $permission = Permission::findOrFail($permission);
+        $permission = Permission::findOrFail($id);
         return view('permissions.edit', ['permission' => $permission]);
     }
 
@@ -91,12 +91,12 @@ class PermissionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Permission  $permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Permission $permission)
+    public function update(Request $request, $id)
     {
-        $permission = Permission::findOrFail($permission);
+        $permission = Permission::findOrFail($id);
 
         $this->validate($request, [
             'name' => 'required',
@@ -118,12 +118,12 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Permission  $permission
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permission $permission)
+    public function destroy($id)
     {
-        $permission = Permission::destroy($permission);
+        $permission = Permission::destroy($id);
 
         if($permission){
             Session::flash('success', 'Permission deleted Successfully.');
