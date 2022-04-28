@@ -40,12 +40,10 @@ class RolePermissionController extends Controller
         $role_permission =  new RolePermission;
 
         $this->validate($request, [
-            'user_id' => 'required',
             'role_id' => 'required',
             'permission_id' => 'required',
         ]);
 
-        $role_permission->user_id = $request->input('user_id');
         $role_permission->role_id = $request->input('role_id');
         $role_permission->permission_id = $request->input('permission_id');
         $role_permission->added_by = Auth::user()->id;
@@ -95,12 +93,10 @@ class RolePermissionController extends Controller
         $role_permission = RolePermission::findOrFail($id);
 
         $this->validate($request, [
-            'user_id' => 'required',
             'role_id' => 'required',
             'permission_id' => 'required',
         ]);
 
-        $role_permission->user_id = $request->input('user_id');
         $role_permission->role_id = $request->input('role_id');
         $role_permission->permission_id = $request->input('permission_id');
         $role_permission->added_by = Auth::user()->id;
