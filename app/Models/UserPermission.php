@@ -15,8 +15,20 @@ class UserPermission extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
-        'permission_id',
+        'user_id', 'permission_id',
     ];
+        
+    /**
+     * Model Relationships.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }    
+    
+    public function permission()
+    {
+        return $this->belongsTo(Permission::class);
+    }    
 
 }

@@ -19,7 +19,7 @@ class Permission extends Model
     ];
 
     /**
-     * Set up Relationships.
+     * Model Relationships.
      */
     public function roles() {
 

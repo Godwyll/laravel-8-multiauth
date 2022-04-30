@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\UserPermission;
+use Session;
+use Auth;
 
 class UserPermissionController extends Controller
 {

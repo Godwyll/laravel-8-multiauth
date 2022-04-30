@@ -12,13 +12,6 @@ class Helpers
 
     }
 
-    // Function to Get User's Full Name
-    public static function getUserName($user_id){
-        $user = App\User::where('id', $user_id)->first();
-        $fullname = $user->firstname." ".$user->lastname;
-        return $fullname;
-    }
-
     public static function ago($time)
     {
         if (isset($time)) {
@@ -112,69 +105,5 @@ class Helpers
             return $coolDate=NULL;
         }
     }
-
-    // Return if a Student Attendance entry exist for a Session
-    public static function entryExist($student_no, $session_id){
-        if(\App\Models\Entry::where('student_no', $student_no)->where('session_id', $session_id)->first()){
-            return true;
-        }
-    }
-
-    // Function to return if a student is Freshman
-    public static function isStudent($student_no){
-        if(\App\Models\Student::where('student_no', $student_no)->first()){
-            return true;
-        }        
-    }    
-
-    // Function to return the session number of a Timetable Entry
-    public static function getSession($timetable_id){
-        if($timetable = \App\Models\Timetable::find($timetable_id)){
-            switch ($timetable->start_time) {
-                case '08:30:00':
-                    $session = "1";
-                    break;
-                
-                case '12:15:00':
-                    $session = "2";
-                    break;
-                
-                case '16:00:00':
-                    $session = "3";
-                    break;
-                
-                default:
-                    $session = NULL;
-                    break;
-            }
-            
-            return $session;
-        }        
-    }    
-
-    // Function to Truncate Text
-    public static function truncate($text, $length){
-        if(strlen($text)>$length){
-            $truncate = substr($text, 0, $length)."...";
-            return $truncate;
-        }else{
-            return $text;
-        }
-    }
-
-    // Function to Calculate Date from a Given Number of Day(s)
-    // public static function dateFromDays($days){
-    //     $dateCalc = strtotime(date('Y-m-d ').'00:00:00 - '.$days.' day');
-    //     $dateResult = date('Y-m-d H:i:s', $dateCalc);
-    //     return $dateResult;
-    // }
-
-    // Function to Calculate Date from a Given Number of Day(s)
-    public static function dateFromDays($days){
-        $dateCalc = strtotime(date('Y-m-d ').'00:00:00 - '.$days.' day');
-        $dateResult = date('Y-m-d H:i:s', $dateCalc);
-        return $dateResult;
-    }
-
 
 }

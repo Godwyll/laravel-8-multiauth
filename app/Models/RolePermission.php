@@ -15,9 +15,25 @@ class RolePermission extends Model
      * @var array
      */
     protected $fillable = [
-        'role_id',
-        'permission_id',
-        'user_id',
+        'role_id', 'permission_id', 'user_id',
     ];
+        
+    /**
+     * Model Relationships.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }    
+
+    public function permission()
+    {
+        return $this->belongsTo(Permission::class);
+    }    
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }    
 
 }

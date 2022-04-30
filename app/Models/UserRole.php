@@ -15,9 +15,19 @@ class UserRole extends Model
      * @var array
      */
     protected $fillable = [
-        'role_id',
-        'user_id',
-        'added_by',
+        'role_id', 'user_id', 'added_by',
     ];
+        
+    /**
+     * Model Relationships.
+     */   
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }    
     
 }

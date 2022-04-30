@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Permission;
-use App\Models\Role;
-use App\Models\RolePermission;
-use App\Models\UserRole;
+use App\Models\{Permission, Role, RolePermission, UserRole};
 use Session;
 use Auth;
 use Str;

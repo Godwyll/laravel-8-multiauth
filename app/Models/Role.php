@@ -15,12 +15,11 @@ class Role extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'description',
+        'name', 'description',
     ];
 
     /**
-     * Set up Relationships.
+     * Model Relationships.
      */
     public function permissions() {
 
