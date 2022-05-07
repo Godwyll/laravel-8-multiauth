@@ -45,7 +45,7 @@ class UserRoleController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_role->added_by = $request->input('added_by');
+        $user_role->created_by = $request->input('created_by');
         $user_role->role_id = $request->input('role_id');
         $user_role->user_id = Auth::user()->id;
 
@@ -99,7 +99,7 @@ class UserRoleController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_role->added_by = $request->input('added_by');
+        $user_role->created_by = $request->input('created_by');
         $user_role->role_id = $request->input('role_id');
 
         if($user_role->save()){

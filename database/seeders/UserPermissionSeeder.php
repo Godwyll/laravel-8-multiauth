@@ -17,7 +17,7 @@ class UserPermissionSeeder extends Seeder
         DB::table('user_permissions')->insert([
             'user_id' => 1,
             'permission_id' => 1,
-            'added_by' => 1,
+            'created_by' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -46,7 +46,7 @@ class RolePermissionController extends Controller
 
         $role_permission->role_id = $request->input('role_id');
         $role_permission->permission_id = $request->input('permission_id');
-        $role_permission->added_by = Auth::user()->id;
+        $role_permission->created_by = Auth::user()->id;
 
         if($role_permission->save()){
             Session::flash('success', 'Role Permission created Successfully.');
@@ -99,7 +99,7 @@ class RolePermissionController extends Controller
 
         $role_permission->role_id = $request->input('role_id');
         $role_permission->permission_id = $request->input('permission_id');
-        $role_permission->added_by = Auth::user()->id;
+        $role_permission->created_by = Auth::user()->id;
 
         if($role_permission->save()){
             Session::flash('success', 'Role Permission updated Successfully.');

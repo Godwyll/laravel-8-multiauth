@@ -45,7 +45,7 @@ class UserPermissionController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_permission->added_by = $request->input('added_by');
+        $user_permission->created_by = $request->input('created_by');
         $user_permission->permission_id = $request->input('permission_id');
         $user_permission->user_id = Auth::user()->id;
 
@@ -99,7 +99,7 @@ class UserPermissionController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_permission->added_by = $request->input('added_by');
+        $user_permission->created_by = $request->input('created_by');
         $user_permission->permission_id = $request->input('permission_id');
 
         if($user_permission->save()){
