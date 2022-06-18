@@ -21,7 +21,7 @@ class RolePermissionSeeder extends Seeder
             DB::table('role_permissions')->insert([
                 'role_id' => 1,
                 'permission_id' => $permission->id,
-                'user_id' => 1,
+                'created_by' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -30,7 +30,7 @@ class RolePermissionSeeder extends Seeder
         DB::table('role_permissions')->insert([
             'role_id' => 2,
             'permission_id' => 1,
-            'user_id' => 1,
+            'created_by' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
