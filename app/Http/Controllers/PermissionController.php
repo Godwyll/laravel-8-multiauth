@@ -21,7 +21,7 @@ class PermissionController extends Controller
         $permissions = Permission::all();
         $user_roles = UserRole::all();
         $roles = Role::all();
-        return view('permissions.index', ['permissions' => $permissions, 'roles' => $roles, 'role_permissions' => $role_permissions, 'user_roles' => $user_roles, 'count' => 1]);
+        return view('permissions.index', ['permissions' => $permissions, 'roles' => $roles, 'role_permissions' => $role_permissions, 'user_roles' => $user_roles]);
     }
 
     /**
@@ -51,10 +51,11 @@ class PermissionController extends Controller
         $permission->name = $request->input('name');
         $permission->slug = Str::slug($request->input('name'));
 
-        if($permission->save()){
+        try {
+            $permission->save();
             Session::flash('success', 'Permission created Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -102,10 +103,11 @@ class PermissionController extends Controller
         $permission->name = $request->input('name');
         $permission->slug = Str::slug($request->input('name'));
 
-        if($permission->save()){
+        try {
+            $permission->save();
             Session::flash('success', 'Permission updated Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -120,12 +122,12 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $permission = Permission::destroy($id);
-
-        if($permission){
+        
+        try {
+            Permission::destroy($id);
             Session::flash('success', 'Permission deleted Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }

@@ -48,10 +48,13 @@ class RoleController extends Controller
         $role->name = $request->input('name');
         $role->description = $request->input('description');
 
-        if($role->save()){
-            return redirect()->back()->with('success', 'Role created Successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Sorry, something went wrong.');
+        try {
+            $role->save();
+            Session::flash('success', 'Role created Successfully.');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
         }
     }
 
@@ -98,10 +101,13 @@ class RoleController extends Controller
         $role->name = $request->input('name');
         $role->staff_id = $request->input('staff_id');
 
-        if($role->save()){
-            return redirect()->back()->with('success', 'Role updated Successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Sorry, something went wrong.');
+        try {
+            $role->save();
+            Session::flash('success', 'Role updated Successfully.');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
         }
 
     }
@@ -114,12 +120,14 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::destroy($id);
-
-        if($role){
-            return redirect()->back()->with('success', 'Role deleted Successfully.');
-        }else{
-            return redirect()->back()->with('error', 'Sorry, something went wrong.');
+        
+        try {
+            Role::destroy($id);
+            Session::flash('success', 'Role deleted Successfully.');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
         }
 
     }

@@ -45,14 +45,15 @@ class UserPermissionController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_permission->created_by = $request->input('created_by');
+        $user_permission->user_id = $request->input('user_id');
         $user_permission->permission_id = $request->input('permission_id');
-        $user_permission->user_id = Auth::user()->id;
+        $user_permission->created_by = Auth::user()->id;
 
-        if($user_permission->save()){
+        try {
+            $user_permission->save();
             Session::flash('success', 'User Permission created Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -79,7 +80,6 @@ class UserPermissionController extends Controller
     public function edit($id)
     {
         $user_permission = UserPermission::findOrFail($id);
-
         return view('user-permissions.edit', ['user_permission' => $user_permission]);
     }
 
@@ -99,13 +99,14 @@ class UserPermissionController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_permission->created_by = $request->input('created_by');
+        $user_permission->user_id = $request->input('user_id');
         $user_permission->permission_id = $request->input('permission_id');
 
-        if($user_permission->save()){
+        try {
+            $user_permission->save();
             Session::flash('success', 'User Permission updated Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -120,12 +121,12 @@ class UserPermissionController extends Controller
      */
     public function destroy($id)
     {
-        $user_permission = UserPermission::destroy($id);
-
-        if($user_permission){
+        
+        try {
+            UserPermission::destroy($id);
             Session::flash('success', 'User Permission deleted Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }

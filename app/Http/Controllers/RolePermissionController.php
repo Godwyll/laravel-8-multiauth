@@ -48,10 +48,11 @@ class RolePermissionController extends Controller
         $role_permission->permission_id = $request->input('permission_id');
         $role_permission->created_by = Auth::user()->id;
 
-        if($role_permission->save()){
+        try {
+            $role_permission->save();
             Session::flash('success', 'Role Permission created Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -101,10 +102,11 @@ class RolePermissionController extends Controller
         $role_permission->permission_id = $request->input('permission_id');
         $role_permission->created_by = Auth::user()->id;
 
-        if($role_permission->save()){
+        try {
+            $role_permission->save();
             Session::flash('success', 'Role Permission updated Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -119,12 +121,12 @@ class RolePermissionController extends Controller
      */
     public function destroy($id)
     {
-        $role_permission = RolePermission::destroy($id);
-
-        if($role_permission){
+        
+        try {
+            RolePermission::destroy($id);
             Session::flash('success', 'Role Permission deleted Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }

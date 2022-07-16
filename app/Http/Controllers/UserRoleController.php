@@ -45,14 +45,15 @@ class UserRoleController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_role->created_by = $request->input('created_by');
+        $user_role->user_id = $request->input('user_id');
         $user_role->role_id = $request->input('role_id');
-        $user_role->user_id = Auth::user()->id;
+        $user_role->created_by = Auth::user()->id;
 
-        if($user_role->save()){
+        try {
+            $user_role->save();
             Session::flash('success', 'User Role created Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -79,7 +80,6 @@ class UserRoleController extends Controller
     public function edit($id)
     {
         $user_role = UserRole::findOrFail($id);
-
         return view('user-roles.edit', ['user_role' => $user_role]);
     }
 
@@ -99,13 +99,14 @@ class UserRoleController extends Controller
             'user_id' => 'required',
         ]);
 
-        $user_role->created_by = $request->input('created_by');
+        $user_role->user_id = $request->input('user_id');
         $user_role->role_id = $request->input('role_id');
 
-        if($user_role->save()){
+        try {
+            $user_role->save();
             Session::flash('success', 'User Role updated Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -120,12 +121,12 @@ class UserRoleController extends Controller
      */
     public function destroy($id)
     {
-        $user_role = UserRole::destroy($id);
-
-        if($user_role){
+        
+        try {
+            UserRole::destroy($id);
             Session::flash('success', 'User Role deleted Successfully.');
             return redirect()->back();
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }

@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         return view('users.index');
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -52,10 +52,11 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
 
-        if($user->save()){
+        try {
+            $user->save();
             Session::flash('success', 'User created Successfully.');
             return redirect()->back();            
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -117,10 +118,11 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('password'));
         }
 
-        if($user->save()){
+        try {
+            $user->save();
             Session::flash('success', 'User updated Successfully.');
             return redirect()->back();            
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
@@ -135,12 +137,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::destroy($id);
-
-        if($user){
+        
+        try {
+            User::destroy($id);
             Session::flash('success', 'User deleted Successfully.');
             return redirect()->back();            
-        }else{
+        } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
