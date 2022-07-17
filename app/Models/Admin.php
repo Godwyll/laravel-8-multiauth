@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class Admin extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasPermissionsTrait, SoftDeletes, CascadeSoftDeletes;
 
     protected $guard = 'admin';
 

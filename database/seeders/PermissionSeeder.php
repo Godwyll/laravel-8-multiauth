@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Permission;
 
 class PermissionSeeder extends Seeder
 {
@@ -14,69 +14,20 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('permissions')->insert([
-            'name' => 'View Users',
-            'slug' => 'view-users',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'Add Users',
-            'slug' => 'add-users',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'Edit Users',
-            'slug' => 'edit-users',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'Delete Users',
-            'slug' => 'delete-users',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        
-        DB::table('permissions')->insert([
-            'name' => 'View Roles',
-            'slug' => 'view-roles',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'Administer Roles',
-            'slug' => 'administer-roles',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'View Permissions',
-            'slug' => 'view-permissions',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'Administer Permissions',
-            'slug' => 'administer-permissions',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'View Reports',
-            'slug' => 'view-reports',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $permissions = [
+            ['name' => 'View Users', 'slug' => 'view-users'],
+            ['name' => 'Add Users', 'slug' => 'add-users'],
+            ['name' => 'Edit Users', 'slug' => 'edit-users'],
+            ['name' => 'Delete Users', 'slug' => 'delete-users'],
+            ['name' => 'View Roles', 'slug' => 'view-roles'],
+            ['name' => 'Administer Roles', 'slug' => 'administer-roles'],
+            ['name' => 'View Permissions', 'slug' => 'view-permissions'],
+            ['name' => 'Administer Permissions', 'slug' => 'administer-permissions'],
+            ['name' => 'View Reports', 'slug' => 'view-reports'],
+        ];
 
+        foreach ($permissions as $permission) {
+            Permission::create($permission);
+        }
     }
 }
