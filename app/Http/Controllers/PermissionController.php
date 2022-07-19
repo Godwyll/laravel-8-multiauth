@@ -17,21 +17,14 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $role_permissions = RolePermission::all();
-        $permissions = Permission::all();
-        $user_roles = UserRole::all();
-        $roles = Role::all();
-        return view('permissions.index', ['permissions' => $permissions, 'roles' => $roles, 'role_permissions' => $role_permissions, 'user_roles' => $user_roles]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        if (Auth::user()->can('view-permissions')) {
+            $permissions = Permission::all();
+            $roles = Role::with('permissions')->get();
+            return view('permissions.index', ['permissions' => $permissions, 'roles' => $roles]);
+        }
+        
+        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+        return redirect()->back();        
     }
 
     /**
@@ -42,35 +35,28 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $permission =  new Permission;
-
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-
-        $permission->name = $request->input('name');
-        $permission->slug = Str::slug($request->input('name'));
-
-        try {
-            $permission->save();
-            Session::flash('success', 'Permission created Successfully.');
-            return redirect()->back();
-        } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+        if (Auth::user()->can('administer-permissions')) {
+            $permission =  new Permission;
+    
+            $this->validate($request, [
+                'name' => 'required',
+            ]);
+    
+            $permission->name = $request->input('name');
+            $permission->slug = Str::slug($request->input('name'));
+    
+            try {
+                $permission->save();
+                Session::flash('success', 'Permission created Successfully.');
+                return redirect()->back();
+            } catch (\Throwable $th) {
+                Session::flash('error', 'Sorry, something went wrong.');
+                return redirect()->back();
+            }
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $permission = Permission::findOrFail($id);
-        return view('permissions.show', ['permission' => $permission]);
+        
+        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+        return redirect()->back();          
     }
 
     /**
@@ -81,8 +67,13 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        $permission = Permission::findOrFail($id);
-        return view('permissions.edit', ['permission' => $permission]);
+        if (Auth::user()->can('administer-permissions')) {
+            $permission = Permission::findOrFail($id);
+            return view('permissions.edit', ['permission' => $permission]);
+        }
+        
+        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+        return redirect()->back();          
     }
 
     /**
@@ -94,24 +85,28 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $permission = Permission::findOrFail($id);
-
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-
-        $permission->name = $request->input('name');
-        $permission->slug = Str::slug($request->input('name'));
-
-        try {
-            $permission->save();
-            Session::flash('success', 'Permission updated Successfully.');
-            return redirect()->back();
-        } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+        if (Auth::user()->can('administer-permissions')) {
+            $permission = Permission::findOrFail($id);
+    
+            $this->validate($request, [
+                'name' => 'required',
+            ]);
+    
+            $permission->name = $request->input('name');
+            $permission->slug = Str::slug($request->input('name'));
+    
+            try {
+                $permission->save();
+                Session::flash('success', 'Permission updated Successfully.');
+                return redirect()->back();
+            } catch (\Throwable $th) {
+                Session::flash('error', 'Sorry, something went wrong.');
+                return redirect()->back();
+            }
         }
-
+        
+        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+        return redirect()->back();
     }
 
     /**
@@ -122,15 +117,18 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        
-        try {
-            Permission::destroy($id);
-            Session::flash('success', 'Permission deleted Successfully.');
-            return redirect()->back();
-        } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+        if (Auth::user()->can('administer-permissions')) {
+            try {
+                Permission::destroy($id);
+                Session::flash('success', 'Permission deleted Successfully.');
+                return redirect()->back();
+            } catch (\Throwable $th) {
+                Session::flash('error', 'Sorry, something went wrong.');
+                return redirect()->back();
+            }
         }
-
+        
+        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+        return redirect()->back();  
     }
 }

@@ -16,18 +16,8 @@ class UserRoleController extends Controller
      */
     public function index()
     {
-        $user_roles = UserRole::all();
-        return view('user-roles.index', ['user_roles' => $user_roles]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $user_permissions = UserPermission::all();
+        return view('user-permissions.index', ['user_permissions' => $user_permissions]);
     }
 
     /**
@@ -38,37 +28,25 @@ class UserRoleController extends Controller
      */
     public function store(Request $request)
     {
-        $user_role =  new UserRole;
+        $user_permission =  new UserPermission;
 
         $this->validate($request, [
-            'role_id' => 'required',
+            'permission_id' => 'required',
             'user_id' => 'required',
         ]);
 
-        $user_role->user_id = $request->input('user_id');
-        $user_role->role_id = $request->input('role_id');
-        $user_role->created_by = Auth::user()->id;
+        $user_permission->user_id = $request->input('user_id');
+        $user_permission->permission_id = $request->input('permission_id');
+        $user_permission->created_by = Auth::user()->id;
 
         try {
-            $user_role->save();
-            Session::flash('success', 'User Role created Successfully.');
+            $user_permission->save();
+            Session::flash('success', 'User Permission created Successfully.');
             return redirect()->back();
         } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $user_role = UserRole::findOrFail($id);
-        return view('user-roles.show', ['user_role' => $user_role]);
     }
 
     /**
@@ -79,8 +57,8 @@ class UserRoleController extends Controller
      */
     public function edit($id)
     {
-        $user_role = UserRole::findOrFail($id);
-        return view('user-roles.edit', ['user_role' => $user_role]);
+        $user_permission = UserPermission::findOrFail($id);
+        return view('user-permissions.edit', ['user_permission' => $user_permission]);
     }
 
     /**
@@ -92,25 +70,24 @@ class UserRoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user_role = UserRole::findOrFail($id);
+        $user_permission = UserPermission::findOrFail($id);
 
         $this->validate($request, [
-            'role_id' => 'required',
+            'permission_id' => 'required',
             'user_id' => 'required',
         ]);
 
-        $user_role->user_id = $request->input('user_id');
-        $user_role->role_id = $request->input('role_id');
+        $user_permission->user_id = $request->input('user_id');
+        $user_permission->permission_id = $request->input('permission_id');
 
         try {
-            $user_role->save();
-            Session::flash('success', 'User Role updated Successfully.');
+            $user_permission->save();
+            Session::flash('success', 'User Permission updated Successfully.');
             return redirect()->back();
         } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-
     }
 
     /**
@@ -120,16 +97,14 @@ class UserRoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        
+    {        
         try {
-            UserRole::destroy($id);
-            Session::flash('success', 'User Role deleted Successfully.');
+            UserPermission::destroy($id);
+            Session::flash('success', 'User Permission deleted Successfully.');
             return redirect()->back();
         } catch (\Throwable $th) {
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-
     }
 }

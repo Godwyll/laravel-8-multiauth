@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\RolePermission;
 use Session;
+use Auth;
 
 class RolePermissionController extends Controller
 {
@@ -17,16 +18,6 @@ class RolePermissionController extends Controller
     {
         $role_permissions = RolePermission::all();
         return view('role-permissions.index', ['role_permissions' => $role_permissions]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -56,18 +47,6 @@ class RolePermissionController extends Controller
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $role_permission = RolePermission::findOrFail($id);
-        return view('role-permissions.show', ['role_permission' => $role_permission]);
     }
 
     /**
@@ -110,7 +89,6 @@ class RolePermissionController extends Controller
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-
     }
 
     /**
@@ -120,8 +98,7 @@ class RolePermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        
+    {        
         try {
             RolePermission::destroy($id);
             Session::flash('success', 'Role Permission deleted Successfully.');
@@ -130,6 +107,5 @@ class RolePermissionController extends Controller
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-
     }
 }

@@ -21,16 +21,6 @@ class UserPermissionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -57,18 +47,6 @@ class UserPermissionController extends Controller
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $user_permission = UserPermission::findOrFail($id);
-        return view('user-permissions.show', ['user_permission' => $user_permission]);
     }
 
     /**
@@ -110,7 +88,6 @@ class UserPermissionController extends Controller
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-
     }
 
     /**
@@ -120,8 +97,7 @@ class UserPermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        
+    {        
         try {
             UserPermission::destroy($id);
             Session::flash('success', 'User Permission deleted Successfully.');
@@ -130,6 +106,5 @@ class UserPermissionController extends Controller
             Session::flash('error', 'Sorry, something went wrong.');
             return redirect()->back();
         }
-
     }
 }
