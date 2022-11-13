@@ -16,6 +16,11 @@ class UserController extends Controller
      */
     public function index()
     {
+        if (!Auth::user()->can('view-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
+
         return view('admin.users.index');
     }
 
@@ -26,6 +31,11 @@ class UserController extends Controller
      */
     public function create()
     {
+        if (!Auth::user()->can('add-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
+
         return view('admin.users.create');
     }
 
@@ -37,6 +47,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::user()->can('add-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
+
         $user = new User;
 
         $this->validate($request, [
@@ -71,6 +86,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        if (!Auth::user()->can('view-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
+
         $user = User::findOrFail($id);
         return view('admin.users.show', ['user' => $user]);
     }
@@ -83,6 +103,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        if (!Auth::user()->can('edit-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
+
         $user = User::findOrFail($id);
         return view('admin.users.edit', ['user' => $user]);
     }
@@ -96,6 +121,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!Auth::user()->can('edit-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
+
         $user = User::findOrFail($id);
 
         $this->validate($request, [
@@ -136,6 +166,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        if (!Auth::user()->can('delete-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
         
         try {
             User::destroy($id);

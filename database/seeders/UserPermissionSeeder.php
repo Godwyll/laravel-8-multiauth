@@ -14,12 +14,12 @@ class UserPermissionSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('user_permissions')->insert([
-            'user_id' => 1,
-            'permission_id' => 1,
-            'created_by' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $user_permissions = [
+            ['user_id' => 1, 'permission_id' => 1, 'created_by' => 1]
+        ];
+
+        foreach ($user_permissions as $user_permission) {
+            UserPermission::create($user_permission);
+        }            
     }
 }

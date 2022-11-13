@@ -26,4 +26,16 @@ class Admin extends Authenticatable
         'firstname', 'lastname', 'username', 'email', 'password',
     ];
 
+    /**
+     * Model Relationships.
+     */
+
+    /**
+     * Model Methods.
+     */   
+    public function fullname()
+    {
+        return $this->firstname .' '.$this->lastname;
+    }
+
 }

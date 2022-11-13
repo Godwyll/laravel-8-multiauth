@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\UserRole;
 
 class UserRoleSeeder extends Seeder
 {
@@ -14,14 +14,12 @@ class UserRoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('user_roles')->insert([
-            'user_id' => 1,
-            'role_id' => 1,
-            'created_by' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        
+        $user_roles = [
+            ['user_id' => 1, 'role_id' => 1, 'created_by' => 1],
+        ];
 
+        foreach ($user_roles as $user_role) {
+            UserRole::create($user_role);
+        }
     }
 }

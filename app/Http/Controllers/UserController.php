@@ -18,13 +18,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->can('view-users')) {
-            $users = User::all();
-            return view('users.index', ['users'=>$users]);
+        if (!Auth::user()->can('view-users')) {
+            // abort(403);
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
         }
-        // abort(403);
-        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-        return redirect()->back();
+
+        $users = User::all();
+        return view('users.index', ['users'=>$users]);
     }
     
     /**
@@ -34,12 +35,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->can('add-users')) {
-            return view('users.create');
+        if (!Auth::user()->can('add-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
         }
+        return view('users.create');
         
-        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-        return redirect()->back();
     }
 
     /**
@@ -50,35 +51,35 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->can('add-users')) {
-            $user = new User;
-            
-            $this->validate($request, [
-                'firstname' => ['required', 'string', 'max:255'],
-                'lastname' => ['required', 'string', 'max:255'],
-                'username' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'password' => ['required', 'string', 'min:6', 'confirmed'],
-            ]);
-    
-            $user->firstname = $request->input('firstname');
-            $user->lastname = $request->input('lastname');
-            $user->username = $request->input('username');
-            $user->email = $request->input('email');
-            $user->password = Hash::make($request->input('password'));
-    
-            try {
-                $user->save();
-                Session::flash('success', 'User created Successfully.');
-                return redirect()->back();            
-            } catch (\Throwable $th) {
-                Session::flash('error', 'Sorry, something went wrong.');
-                return redirect()->back();
-            }
+        if (!Auth::user()->can('add-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
         }
         
-        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-        return redirect()->back();
+        $user = new User;
+        
+        $this->validate($request, [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        $user->firstname = $request->input('firstname');
+        $user->lastname = $request->input('lastname');
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+
+        try {
+            $user->save();
+            Session::flash('success', 'User created Successfully.');
+            return redirect()->back();            
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -89,13 +90,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        if (Auth::user()->can('view-users')) {
-            $user = User::findOrFail($id);
-            return view('users.show', ['user' => $user]);
+        if (!Auth::user()->can('view-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
         }
         
-        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-        return redirect()->back();
+        $user = User::findOrFail($id);
+        return view('users.show', ['user' => $user]);
     }
 
     /**
@@ -106,13 +107,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        if (Auth::user()->can('edit-users')) {
-            $user = User::findOrFail($id);
-            return view('users.edit', ['user' => $user]);
+        if (!Auth::user()->can('edit-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
         }
         
-        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-        return redirect()->back();
+        $user = User::findOrFail($id);
+        return view('users.edit', ['user' => $user]);
     }
 
     /**
@@ -124,41 +125,41 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (Auth::user()->can('edit-users')) {
-            $user = User::findOrFail($id);
-    
+        if (!Auth::user()->can('edit-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();          
+        }    
+
+        $user = User::findOrFail($id);
+
+        $this->validate($request, [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
+        
+        $user->firstname = $request->input('firstname');
+        $user->lastname = $request->input('lastname');
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        
+        if($request->input('password')){
             $this->validate($request, [
-                'firstname' => ['required', 'string', 'max:255'],
-                'lastname' => ['required', 'string', 'max:255'],
-                'username' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255'],
+                'password' => ['required', 'string', 'min:6', 'confirmed'],
             ]);
             
-            $user->firstname = $request->input('firstname');
-            $user->lastname = $request->input('lastname');
-            $user->username = $request->input('username');
-            $user->email = $request->input('email');
-            
-            if($request->input('password')){
-                $this->validate($request, [
-                    'password' => ['required', 'string', 'min:6', 'confirmed'],
-                ]);
-                
-                $user->password = Hash::make($request->input('password'));
-            }
-    
-            try {
-                $user->save();
-                Session::flash('success', 'User updated Successfully.');
-                return redirect()->back();            
-            } catch (\Throwable $th) {
-                Session::flash('error', 'Sorry, something went wrong.');
-                return redirect()->back();
-            }
+            $user->password = Hash::make($request->input('password'));
         }
-        
-        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-        return redirect()->back();        
+
+        try {
+            $user->save();
+            Session::flash('success', 'User updated Successfully.');
+            return redirect()->back();            
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -169,18 +170,18 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        if (Auth::user()->can('delete-users')) {
-            try {
-                User::destroy($id);
-                Session::flash('success', 'User deleted Successfully.');
-                return redirect()->back();            
-            } catch (\Throwable $th) {
-                Session::flash('error', 'Sorry, something went wrong.');
-                return redirect()->back();
-            }
+        if (!Auth::user()->can('delete-users')) {
+            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();       
         }
         
-        Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-        return redirect()->back();       
+        try {
+            User::destroy($id);
+            Session::flash('success', 'User deleted Successfully.');
+            return redirect()->back();            
+        } catch (\Throwable $th) {
+            Session::flash('error', 'Sorry, something went wrong.');
+            return redirect()->back();
+        }
     }
 }
