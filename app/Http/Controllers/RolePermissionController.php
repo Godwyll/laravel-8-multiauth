@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RolePermission;
-use Session;
-use Auth;
 
 class RolePermissionController extends Controller
 {
@@ -17,10 +15,10 @@ class RolePermissionController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::user()->can('administer-permissions')) {
-            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-            return redirect()->back();          
-        }    
+        if (!auth()->user()->can('administer-permissions')) {
+            session()->flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
+        }
 
         $role_permission =  new RolePermission;
 
@@ -31,16 +29,15 @@ class RolePermissionController extends Controller
 
         $role_permission->role_id = $request->input('role_id');
         $role_permission->permission_id = $request->input('permission_id');
-        $role_permission->created_by = Auth::user()->id;
+        $role_permission->created_by = auth()->user()->id;
 
         try {
             $role_permission->save();
-            Session::flash('success', 'Role Permission created Successfully.');
-            return redirect()->back();
+            session()->flash('success', 'Role Permission created Successfully.');
         } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+            session()->flash('error', 'Sorry, something went wrong.');
         }
+        return redirect()->back();
     }
 
     /**
@@ -50,19 +47,18 @@ class RolePermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {   
-        if (!Auth::user()->can('administer-permissions')) {
-            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-            return redirect()->back();          
-        }    
+    {
+        if (!auth()->user()->can('administer-permissions')) {
+            session()->flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
+        }
 
         try {
             RolePermission::destroy($id);
-            Session::flash('success', 'Role Permission deleted Successfully.');
-            return redirect()->back();
+            session()->flash('success', 'Role Permission deleted Successfully.');
         } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+            session()->flash('error', 'Sorry, something went wrong.');
         }
+        return redirect()->back();
     }
 }

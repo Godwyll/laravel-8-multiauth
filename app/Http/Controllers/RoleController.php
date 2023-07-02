@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Role;
-use Session;
-use Auth;
 
 class RoleController extends Controller
 {
@@ -16,10 +14,10 @@ class RoleController extends Controller
      */
     public function index()
     {
-        if (!Auth::user()->can('view-permissions')) {
-            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-            return redirect()->back();          
-        }    
+        if (!auth()->user()->can('view-permissions')) {
+            session()->flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
+        }
 
         $roles = Role::all();
         return view('roles.index', ['roles' => $roles]);
@@ -33,10 +31,10 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::user()->can('administer-permissions')) {
-            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-            return redirect()->back();          
-        }    
+        if (!auth()->user()->can('administer-permissions')) {
+            session()->flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
+        }
 
         $role =  new Role;
 
@@ -50,12 +48,11 @@ class RoleController extends Controller
 
         try {
             $role->save();
-            Session::flash('success', 'Role created Successfully.');
-            return redirect()->back();
+            session()->flash('success', 'Role created Successfully.');
         } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+            session()->flash('error', 'Sorry, something went wrong.');
         }
+        return redirect()->back();
     }
 
     /**
@@ -66,10 +63,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        if (!Auth::user()->can('administer-permissions')) {
-            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-            return redirect()->back();          
-        }    
+        if (!auth()->user()->can('administer-permissions')) {
+            session()->flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
+        }
 
         $role = Role::findOrFail($id);
         return view('roles.edit')->with('role', $role);
@@ -84,11 +81,11 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!Auth::user()->can('administer-permissions')) {
-            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
-            return redirect()->back();          
-        }    
-        
+        if (!auth()->user()->can('administer-permissions')) {
+            session()->flash('error', 'Sorry, you are not authorized to access this resource.');
+            return redirect()->back();
+        }
+
         $role = Role::findOrFail($id);
 
         $this->validate($request, [
@@ -101,12 +98,11 @@ class RoleController extends Controller
 
         try {
             $role->save();
-            Session::flash('success', 'Role updated Successfully.');
-            return redirect()->back();
+            session()->flash('success', 'Role updated Successfully.');
         } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+            session()->flash('error', 'Sorry, something went wrong.');
         }
+        return redirect()->back();
     }
 
     /**
@@ -117,18 +113,17 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->can('administer-permissions')) {
-            Session::flash('error', 'Sorry, you are not authorized to access this resource.');
+        if (!auth()->user()->can('administer-permissions')) {
+            session()->flash('error', 'Sorry, you are not authorized to access this resource.');
             return redirect()->back();
         }
-        
+
         try {
             Role::destroy($id);
-            Session::flash('success', 'Role deleted Successfully.');
-            return redirect()->back();
+            session()->flash('success', 'Role deleted Successfully.');
         } catch (\Throwable $th) {
-            Session::flash('error', 'Sorry, something went wrong.');
-            return redirect()->back();
+            session()->flash('error', 'Sorry, something went wrong.');
         }
+        return redirect()->back();
     }
 }
